@@ -29,7 +29,7 @@ jobs:
           npx eslint . --ext .js,.jsx,.ts,.tsx
 
   test-backend:
-    name: Run Backend Tests & Coverage (incl. E2E)
+    name: Run Backend Tests & Coverage
     runs-on: ubuntu-latest
 
     steps:
@@ -49,13 +49,12 @@ jobs:
 
       - name: Start backend server
         working-directory: backend
-        run: npm start &
+        run: npm start
 
       - name: Start frontend server
         working-directory: frontend
-        env:
-          CI: "true"
-        run: npm start &
+
+        run: npm start
 
       - name: Wait for services to be ready
         run: |
