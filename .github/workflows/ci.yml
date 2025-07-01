@@ -1,6 +1,7 @@
 name: CI
 
 on:
+  push:
   pull_request:
 
 jobs:
@@ -16,6 +17,7 @@ jobs:
         with:
           node-version: 18
 
+      # LINT FRONTEND
       - name: Install & lint frontend
         working-directory: frontend
         run: |
@@ -23,6 +25,7 @@ jobs:
           npm install --no-save globals eslint-plugin-react @eslint/js
           npx eslint . --ext .js,.jsx,.ts,.tsx
 
+      # LINT BACKEND
       - name: Install & lint backend
         working-directory: backend
         run: |
