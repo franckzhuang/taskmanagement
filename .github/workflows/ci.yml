@@ -49,17 +49,11 @@ jobs:
 
       - name: Start backend server
         working-directory: backend
-        run: npm start
+        run: npm start &
 
       - name: Start frontend server
         working-directory: frontend
-
-        run: npm start
-
-      - name: Wait for services to be ready
-        run: |
-          wait-on http://localhost:3000
-          wait-on http://localhost:3001
+        run: npm start &
 
       - name: Run backend tests with coverage
         working-directory: backend
