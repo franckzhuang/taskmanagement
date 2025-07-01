@@ -5,19 +5,15 @@ on:
   pull_request:
 
 jobs:
-  lint-and-coverage:
+  lint:
+    name: Lint Frontend & Backend
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out code
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js 18
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      # LINT FRONTEND
       - name: Install & lint frontend
         working-directory: frontend
         run: |
@@ -25,7 +21,6 @@ jobs:
           npm install --no-save globals eslint-plugin-react @eslint/js
           npx eslint . --ext .js,.jsx,.ts,.tsx
 
-      # LINT BACKEND
       - name: Install & lint backend
         working-directory: backend
         run: |
@@ -33,6 +28,34 @@ jobs:
           npm install --no-save globals eslint-plugin-react @eslint/js
           npx eslint . --ext .js,.jsx,.ts,.tsx
 
-      # COVERAGE
-      # - name: Run Jest coverage report
-      #   uses: ArtiomTr/jest-coverage-report-action@v2
+  test-backend:
+    name: Run Backend Tests & Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install wait-on
+        run: npm install -g wait-on
+
+      - name: Install dependencies
+        run: |
+          cd backend && npm ci
+          cd ../frontend && npm ci
+
+      - name: Start backend server
+        working-directory: backend
+        run: npm start &
+
+      - name: Start frontend server
+        working-directory: frontend
+        run: npm start &
+
+      - name: Run backend tests with coverage
+        working-directory: backend
+        run: npm test -- --coverage
+
