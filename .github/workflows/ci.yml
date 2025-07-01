@@ -8,17 +8,12 @@ jobs:
   lint:
     name: Lint Frontend & Backend
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out code
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js 18
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      # LINT FRONTEND
       - name: Install & lint frontend
         working-directory: frontend
         run: |
@@ -26,7 +21,6 @@ jobs:
           npm install --no-save globals eslint-plugin-react @eslint/js
           npx eslint . --ext .js,.jsx,.ts,.tsx
 
-      # LINT BACKEND
       - name: Install & lint backend
         working-directory: backend
         run: |
@@ -35,23 +29,39 @@ jobs:
           npx eslint . --ext .js,.jsx,.ts,.tsx
 
   test-backend:
-    name: Run Backend Tests & Coverage
+    name: Run Backend Tests & Coverage (incl. E2E)
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Setup Node.js 18
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      - name: Install backend dependencies
-        working-directory: backend
-        run: npm ci
+      - name: Install wait-on
+        run: npm install -g wait-on
 
-      # TEST WITH COVERAGE
+      - name: Install dependencies
+        run: |
+          cd backend && npm ci
+          cd ../frontend && npm ci
+
+      - name: Start backend server
+        working-directory: backend
+        run: npm start &
+
+      - name: Start frontend server
+        working-directory: frontend
+        env:
+          CI: "true"
+        run: npm start &
+
+      - name: Wait for services to be ready
+        run: |
+          wait-on http://localhost:3000
+          wait-on http://localhost:3001
+
       - name: Run backend tests with coverage
         working-directory: backend
         run: npm test -- --coverage
