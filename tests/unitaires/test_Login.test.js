@@ -1,4 +1,3 @@
-// tests/Login.test.js
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Login from '../../frontend/src/components/Login';
@@ -6,7 +5,6 @@ import Login from '../../frontend/src/components/Login';
 describe('Login', () => {
   test('rend le formulaire de connexion', () => {
     render(<Login />);
-    // supposer des champs labelisés "Email" et "Password"
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /login|se connecter/i })).toBeInTheDocument();

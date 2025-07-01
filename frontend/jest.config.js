@@ -1,5 +1,5 @@
 module.exports = {
-  roots: ['../../tests/unitaires'], // <-- chemin relatif vers la racine depuis frontend/
+  roots: ['../../tests/unitaires'], 
   transform: {
     '^.+\.(js|jsx)$': 'babel-jest',
   },

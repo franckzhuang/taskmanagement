@@ -1,4 +1,3 @@
-// tests/TaskCard.test.js
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import TaskCard from '../../frontend/src/components/TaskCard';
