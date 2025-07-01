@@ -5,7 +5,8 @@ on:
   pull_request:
 
 jobs:
-  lint-and-coverage:
+  lint:
+    name: Lint Frontend & Backend
     runs-on: ubuntu-latest
 
     steps:
@@ -33,6 +34,25 @@ jobs:
           npm install --no-save globals eslint-plugin-react @eslint/js
           npx eslint . --ext .js,.jsx,.ts,.tsx
 
-      # COVERAGE
-      # - name: Run Jest coverage report
-      #   uses: ArtiomTr/jest-coverage-report-action@v2
+  test-backend:
+    name: Run Backend Tests & Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm ci
+
+      # TEST WITH COVERAGE
+      - name: Run backend tests with coverage
+        working-directory: backend
+        run: npm test -- --coverage
+
