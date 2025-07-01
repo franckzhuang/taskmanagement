@@ -1,9 +1,6 @@
 # taskmanagement
 Application de gestion de tâches
 
-# taskmanagement
-Application de gestion de tâches
-
 # Gestionnaire de Tâches Collaboratif
 
 Ce projet est une application web de gestion de tâches en équipe. Elle permet de créer, assigner, modifier et suivre des tâches avec système de priorité, de statut, et d'authentification sécurisée.
